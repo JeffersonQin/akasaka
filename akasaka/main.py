@@ -26,11 +26,13 @@ def main():
     parser = argparse.ArgumentParser(description='Dynamically load a Python class from a module.', add_help=False)
     parser.add_argument('module_path', type=str, help='The module path in the format "module.submodule.ClassName"')
     parser.add_argument('--num_process', type=int, default=multiprocessing.cpu_count(), help='Number of processes to use (default: number of CPU cores)')
+    parser.add_argument('--chunksize', type=int, default=1, help='Number of tasks to be sent to a worker process at a time (default: 1)')
     parser.add_argument('-h', '--help', action='store_true', help='Show this help message and exit')
     args, remaining_args = parser.parse_known_args()
     
     module_path = args.module_path
     num_process = args.num_process
+    chunksize = args.chunksize
     
     if args.help:
         remaining_args += ["-h"]
@@ -53,13 +55,6 @@ def main():
     print(f"Generated {len(tasks)} tasks to be executed.")
 
     pool = multiprocessing.Pool(processes=num_process)
-
-    # using the chunksize for better performance
-    # this implementation is taken from the official implementation of multiprocessing.Pool.map
-    chunksize, extra = divmod(len(tasks), num_process * 4)
-    if extra:
-        chunksize += 1
-
     _ = list(tqdm(pool.imap_unordered(execute, tasks, chunksize=chunksize), total=len(tasks)))
 
     pool.close()
