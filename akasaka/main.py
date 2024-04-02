@@ -27,7 +27,8 @@ def main():
     parser.add_argument('module_path', type=str, help='The module path in the format "module.submodule.ClassName"')
     parser.add_argument('--num_process', type=int, default=multiprocessing.cpu_count(), help='Number of processes to use (default: number of CPU cores)')
     parser.add_argument('--chunksize', type=int, default=1, help='Number of tasks to be sent to a worker process at a time (default: 1)')
-    parser.add_argument('-h', '--help', action='store_true', help='Show this help message and exit')
+    parser.add_argument('-h', '--help', action='store_true', help='Show help message for task and exit')
+    parser.add_argument('-H', '--hel-akasaka', action='help', help='Show Akasaka help message and exit')
     args, remaining_args = parser.parse_known_args()
     
     module_path = args.module_path
