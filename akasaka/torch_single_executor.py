@@ -10,4 +10,6 @@ def akasaka_torch_single_execute(task, device):
     dataloader = task.get_dataloader()
 
     for batch in tqdm(dataloader):
+        if task.is_executed(batch):
+            continue
         task(device=device, batch=batch)
