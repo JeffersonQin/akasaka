@@ -40,9 +40,13 @@ def main():
         return
 
     if issubclass(loaded_class, AkasakaTorchTask):
-        from .torch_executor import akasaka_torch_execute
         devices = args.devices
-        akasaka_torch_execute(akasaka_task, module_path, remaining_args, devices)
+        if len(devices) == 1:
+            from .torch_single_executor import akasaka_torch_single_execute
+            akasaka_torch_single_execute(akasaka_task, devices[0])
+        else:
+            from .torch_executor import akasaka_torch_execute
+            akasaka_torch_execute(akasaka_task, module_path, remaining_args, devices)
         return
 
     raise ValueError("The loaded class should be a subclass of 'AkasakaTask' or 'AkasakaTorchTask'.")
